@@ -1,6 +1,7 @@
 const WORKER = "https://cardcreator.geroyuni.workers.dev";
 const SHARE_BASE = "https://geroyuni.github.io/CardCreator";
 const IGDB = "https://images.igdb.com/igdb/image/upload/t_cover_big/";
+const IGDB_SMALL = "https://images.igdb.com/igdb/image/upload/t_cover_small/";
 const ADD_IMAGE = "assets/add.svg";
 const LATEST_VERSIONS = {
     games: "v1_games",
@@ -338,7 +339,10 @@ function showResultsIGDB(games) {
     searchResults.innerHTML = "";
     for (const game of games || []) {
         const button = document.createElement("button");
-        button.textContent = game.name;
+        const img = document.createElement("img");
+        img.src = IGDB_SMALL + game.cover.image_id + ".jpg";
+        img.alt = "";
+        button.append(game.name, img);
         button.addEventListener("click", () => applyImage(
             IGDB + game.cover.image_id + ".jpg", game.name));
         searchResults.append(button);

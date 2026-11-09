@@ -453,13 +453,24 @@ input[type="color"]::-moz-color-swatch {
     }
 
     button {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
         width: 100%;
         padding: 12px;
         border: 0;
         background: transparent;
         text-align: left;
         cursor: pointer;
+    }
+
+    button img {
+        flex: none;
+        width: 32px;
+        aspect-ratio: 3 / 4;
+        border-radius: 4px;
+        object-fit: cover;
     }
 
     button:hover,
