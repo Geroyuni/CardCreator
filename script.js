@@ -71,7 +71,10 @@ function guard() {
         "any existing cards saved to your device, and will replace it " +
         "with this card collection. Continue?"
     );
-    shared = !ok;
+    if (ok) {
+        shared = false;
+        history.replaceState(null, "", location.pathname);
+    }
     return ok;
 }
 
