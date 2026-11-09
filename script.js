@@ -338,6 +338,7 @@ function showResultsURL(url) {
 function showResultsIGDB(games) {
     searchResults.innerHTML = "";
     for (const game of games || []) {
+        if (!game.cover?.image_id) continue;
         const button = document.createElement("button");
         const img = document.createElement("img");
         img.src = IGDB_SMALL + game.cover.image_id + ".jpg";
