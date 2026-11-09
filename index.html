@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>CardCreator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/cardcreator.svg" type="image/svg+xml">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <nav id="navbar" aria-label="Main">
+        <div class="navbar-left">
+            <a href="/"><span class="navbar-title">
+                    <svg class="icon" viewBox="0 0 24 24" stroke-linecap="round" aria-hidden="true">
+                        <g transform="matrix(1.062518,-0.284701,0.274995,1.026296,-2.987645,2.816156)">
+                            <path fill="currentColor"
+                                d="M14.182,2.118C16.189,2.118 17.818,3.805 17.818,5.882L17.818,18.118C17.818,20.195 16.189,21.882 14.182,21.882L7.818,21.882C5.811,21.882 4.182,20.195 4.182,18.118L4.182,5.882C4.182,3.805 5.811,2.118 7.818,2.118L14.182,2.118ZM14.182,4L7.818,4C6.815,4 6,4.843 6,5.882L6,18.118C6,19.157 6.815,20 7.818,20L14.182,20C15.185,20 16,19.157 16,18.118L16,5.882C16,4.843 15.185,4 14.182,4Z" />
+                        </g>
+                        <g transform="matrix(0.965926,-0.258819,0.258819,0.965926,-2.343385,2.902346)">
+                            <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                        </g>
+                        <g transform="matrix(-0.965926,0.258819,-0.258819,-0.965926,26.343385,21.097654)">
+                            <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                        </g>
+                    </svg>
+                    CardCreator
+                </span></a>
+            <select id="collectionSelect" class="collection-select" aria-label="Choose collection">
+                <option value="v1_games" selected>Game Collection</option>
+                <option value="v1_music" disabled>Music Collection (Soon)</option>
+            </select>
+        </div>
+        <div class="navbar-right">
+            <button id="resetButton" class="icon-button" aria-label="Reset collection" title="Reset">
+                <span class="icon" aria-hidden="true">restart_alt</span>
+            </button>
+            <button id="shareButton" class="icon-button" aria-label="Share" title="Share">
+                <span class="icon" aria-hidden="true">share</span>
+            </button>
+        </div>
+        <details id="mobileMenu">
+            <summary class="icon-button" aria-label="Menu">
+                <span class="icon" aria-hidden="true">menu</span>
+            </summary>
+            <div class="mobile-panel">
+                <select id="mobileCollectionSelect" class="collection-select" aria-label="Choose collection">
+                    <option value="v1_games" selected>Game Collection</option>
+                    <option value="v1_music" disabled>Music Collection (Soon)</option>
+                </select>
+                <button id="mobileShareButton" class="mobile-item">Share</button>
+                <button id="mobileResetButton" class="mobile-item">Reset to default</button>
+            </div>
+        </details>
+    </nav>
+
+    <main>
+        <div id="updateBanner" hidden>
+            <button id="updateButton" type="button">Update to newest collection version</button>
+        </div>
+        <div id="nameSection">
+            <input id="name" placeholder="Your Name" aria-label="Your name">'s Collection
+            <input id="color" type="color" value="#999" aria-label="Color">
+        </div>
+        <div id="cards"></div>
+    </main>
+
+    <div id="tooltip" hidden></div>
+
+    <div id="search" popover role="dialog" aria-modal="true" aria-label="Search">
+        <input id="searchInput" autocomplete="off" placeholder="Search for a game name, or paste an image link">
+        <ul id="searchResults" hidden></ul>
+    </div>
+
+    <div id="share" popover role="dialog" aria-modal="true" aria-label="Share">
+        <div class="share-header">
+            <h2>Share</h2>
+            <button id="closeShare" class="icon-button" aria-label="Close" title="Close" popovertarget="share"
+                popovertargetaction="hide">
+                <span class="icon" aria-hidden="true">close</span>
+            </button>
+        </div>
+        <div class="share-section">
+            <div class="share-field">
+                <input id="shareUrl" readonly aria-label="Raw link">
+                <button id="copyShare" class="copy-button" aria-label="Copy raw link" title="Copy">
+                    <span class="icon copy" aria-hidden="true">content_copy</span>
+                    <span class="icon check" aria-hidden="true">check</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

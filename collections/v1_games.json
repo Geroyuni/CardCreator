@@ -1,0 +1,274 @@
+{
+    "Best and Worst": [
+        {
+            "name": "Best Game",
+            "description": "Favorite game ever."
+        },
+        {
+            "name": "Worst Game",
+            "description": "Least favorite game ever."
+        },
+        {
+            "name": "Best Franchise",
+            "description": "Favorite game series."
+        },
+        {
+            "name": "Worst Franchise",
+            "description": "Least favorite game series."
+        },
+        {
+            "name": "Best Indie",
+            "description": "Best game developed by small game developer teams."
+        },
+        {
+            "name": "Best AAA",
+            "description": "Best game developed by the industry's biggest teams."
+        },
+        {
+            "name": "Most Surprising",
+            "description": "Game that you didn't expect would be this good."
+        },
+        {
+            "name": "Most Disappointing",
+            "description": "Game you had high hopes for, which weren't met."
+        }
+    ],
+    "Criteria": [
+        {
+            "name": "Story",
+            "description": "Excels in its story and characters."
+        },
+        {
+            "name": "Soundtrack",
+            "description": "The best music of any game out there."
+        },
+        {
+            "name": "Art Style",
+            "description": "Game with your favorite stylistic choices and look."
+        },
+        {
+            "name": "Atmosphere",
+            "description": "Immersive game that makes you feel its world's vibes through the screen."
+        },
+        {
+            "name": "Gameplay",
+            "description": "It's fun to play."
+        }
+    ],
+    "The Random Bin": [
+        {
+            "name": "Wishlist",
+            "description": "Yet to play, but really want to."
+        },
+        {
+            "name": "Will Finish",
+            "description": "Promised to beat at some point."
+        },
+        {
+            "name": "Bad but Fun",
+            "description": "Objectively sucks but is still fun."
+        },
+        {
+            "name": "My Childhood",
+            "description": "Game from your childhood you're most fond of."
+        },
+        {
+            "name": "Relaxing",
+            "description": "Put this one on with some drinks and just have a good time."
+        },
+        {
+            "name": "Difficult",
+            "description": "Game that gave you a good challenge."
+        },
+        {
+            "name": "Hidden Gem",
+            "description": "A good but not widely known game."
+        },
+        {
+            "name": "Oldest Treasure",
+            "description": "Oldest thing you've played that is good."
+        },
+        {
+            "name": "Newest Treasure",
+            "description": "Most recent game you've played that is good."
+        },
+        {
+            "name": "Shortest",
+            "description": "Shortest playtime to completion."
+        },
+        {
+            "name": "It's Free",
+            "description": "All this for no cash?"
+        },
+        {
+            "name": "I Always Come Back",
+            "description": "Played for ages."
+        },
+        {
+            "name": "Mixed Feelings",
+            "description": "Real highs and lows with this one."
+        },
+        {
+            "name": "Browser",
+            "description": "Plays primarily in the browser."
+        },
+        {
+            "name": "Mobile",
+            "description": "Plays primarily on phones."
+        },
+        {
+            "name": "DLC",
+            "description": "Official downloadable content for a game, be it free or paid."
+        },
+        {
+            "name": "Mod or Fan Game",
+            "description": "Unofficial modification to an existing game, or a game using another's IP unofficially."
+        }
+    ],
+    "Genres": [
+        {
+            "name": "Collectathon",
+            "description": "Collect a number of shiny items to progress."
+        },
+        {
+            "name": "Combat / PVP",
+            "description": "Best combat between in-game NPCs or real players."
+        },
+        {
+            "name": "Competitive",
+            "description": "Game focused on competing against other players with a high skill ceiling."
+        },
+        {
+            "name": "Co-op",
+            "description": "Game where you cooperate with someone."
+        },
+        {
+            "name": "Exploration",
+            "description": "All about exploring a big world."
+        },
+        {
+            "name": "Farming",
+            "description": "All about farming."
+        },
+        {
+            "name": "Fighting",
+            "description": "Game where you punch and fight other characters or players."
+        },
+        {
+            "name": "Horror",
+            "description": "gohst"
+        },
+        {
+            "name": "Metroidvania",
+            "description": "Labyrinthian game where your ever-increasing movement abilities dictate where you can go."
+        },
+        {
+            "name": "MMO",
+            "description": "Massive, multiplayer and online."
+        },
+        {
+            "name": "Party",
+            "description": "Game aimed at a group of friends, with a focus on fun rather than pure competition."
+        },
+        {
+            "name": "Platformer",
+            "description": "Game based mainly on the fun of moving the character across a world."
+        },
+        {
+            "name": "Puzzle",
+            "description": "Game where you solve puzzles."
+        },
+        {
+            "name": "Racing",
+            "description": "Game where you try to beat someone in speed."
+        },
+        {
+            "name": "Rhythm",
+            "description": "Timing your inputs to the music is central to the gameplay."
+        },
+        {
+            "name": "Roguelike",
+            "description": "Losing resets (most of) your progression, and each new try is fresh with some random elements."
+        },
+        {
+            "name": "RPG",
+            "description": "Game with a big adventure and a leveling system."
+        },
+        {
+            "name": "Shooter",
+            "description": "Game where you primarily use guns."
+        },
+        {
+            "name": "Sports",
+            "description": "Anything that is a sport in real life, but in a game."
+        },
+        {
+            "name": "Survival",
+            "description": "Put into a world where you manage your health and try to survive."
+        },
+        {
+            "name": "Visual Novel",
+            "description": "Focused on a story and mostly devoid of gameplay."
+        }
+    ],
+    "Characters": [
+        {
+            "name": "Best Character",
+            "description": "Most liked character."
+        },
+        {
+            "name": "Worst Character",
+            "description": "Least liked character."
+        },
+        {
+            "name": "Gameplay",
+            "description": "The character that feels most fun and fluid when playing."
+        },
+        {
+            "name": "Writing",
+            "description": "The personality, how they act and speak, and how they fit narratively."
+        },
+        {
+            "name": "Design",
+            "description": "Best look and visual design."
+        },
+        {
+            "name": "Ally",
+            "description": "Best look and visual design."
+        },
+        {
+            "name": "Villain",
+            "description": "Best look and visual design."
+        },
+        {
+            "name": "Random character",
+            "description": "Side character that doesn't get the spotlight."
+        }
+    ],
+    "Inside the Game": [
+        {
+            "name": "Area",
+            "description": "The best place in a game."
+        },
+        {
+            "name": "Mechanic",
+            "description": "A specific gameplay function that is notable."
+        },
+        {
+            "name": "Boss Fight",
+            "description": "Most memorable boss fight."
+        },
+        {
+            "name": "Enemy",
+            "description": "Regular enemy from a game that you find notable."
+        },
+        {
+            "name": "Non-hostile",
+            "description": "An entity, creature or animal that you find notable."
+        },
+        {
+            "name": "Accessory",
+            "description": "A notable item or weapon."
+        }
+    ]
+}
