@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:affinity="https://www.affinity.studio/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1.062518,-0.284701,0.274995,1.026296,-2.987645,2.816156)">
+        <path fill="currentColor" d="M14.182,2.118C16.189,2.118 17.818,3.805 17.818,5.882L17.818,18.118C17.818,20.195 16.189,21.882 14.182,21.882L7.818,21.882C5.811,21.882 4.182,20.195 4.182,18.118L4.182,5.882C4.182,3.805 5.811,2.118 7.818,2.118L14.182,2.118ZM14.182,4L7.818,4C6.815,4 6,4.843 6,5.882L6,18.118C6,19.157 6.815,20 7.818,20L14.182,20C15.185,20 16,19.157 16,18.118L16,5.882C16,4.843 15.185,4 14.182,4Z"/>
+    </g>
+    <g transform="matrix(0.965926,-0.258819,0.258819,0.965926,-2.343385,2.902346)">
+        <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" style="fill:none;stroke:currentColor;stroke-width:2px;"/>
+    </g>
+    <g transform="matrix(-0.965926,0.258819,-0.258819,-0.965926,26.343385,21.097654)">
+        <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" style="fill:none;stroke:currentColor;stroke-width:2px;"/>
+    </g>
+</svg>
