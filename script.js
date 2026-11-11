@@ -1,5 +1,4 @@
 const WORKER = "https://cardcreator.geroyuni.workers.dev";
-const SHARE_BASE = "https://geroyuni.github.io/CardCreator";
 const IGDB = "https://images.igdb.com/igdb/image/upload/t_cover_big/";
 const IGDB_SMALL = "https://images.igdb.com/igdb/image/upload/t_cover_small/";
 const ADD_IMAGE = "assets/add.svg";
@@ -529,7 +528,7 @@ async function openShare() {
         color: $("color").value.slice(1),
         cards: cardsId,
     });
-    const link = `${SHARE_BASE}?${query}`;
+    const link = `${location.origin + location.pathname}?${query}`;
     const name = $("name").value.trim();
     $("shareUrl").value = link;
     $("copyShare").classList.remove("copied");
