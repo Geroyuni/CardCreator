@@ -234,15 +234,15 @@
         },
         {
             "name": "Ally",
-            "description": "Best look and visual design."
+            "description": "Character that cooperates with you in a game."
         },
         {
             "name": "Villain",
-            "description": "Best look and visual design."
+            "description": "*smokes cigar* you ain't know nothing kiddo."
         },
         {
             "name": "Random character",
-            "description": "Side character that doesn't get the spotlight."
+            "description": "Clearly not a main character, but still memorable to you."
         }
     ],
     "Inside the Game": [
@@ -263,7 +263,7 @@
             "description": "Regular enemy from a game that you find notable."
         },
         {
-            "name": "Non-hostile",
+            "name": "Passive creature",
             "description": "An entity, creature or animal that you find notable."
         },
         {
