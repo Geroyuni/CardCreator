@@ -93,7 +93,7 @@ function importJxl() {
 function guard() {
     if (!shared) return true;
     const ok = confirm(
-        "You are viewing a shared collection. Editing will replace " +
+        "You are viewing a shared collection. Editing will delete " +
         "any existing cards saved to your device, and will replace it " +
         "with this card collection. Continue?"
     );
@@ -281,8 +281,8 @@ async function updateCollection() {
         "Are you sure you want to update this to its newer version?";
     if (shared)
         message +=
-            " You are viewing a shared collection, so this will replace " +
-            "any existing cards saved to your device, and replace it " +
+            " You are viewing a shared collection, so this will delete " +
+            "any existing cards saved to your device, and will replace it " +
             "with this updated collection.";
     if (added.length)
         message += "\nThese cards will be added:\n\n" + added.join("\n");
