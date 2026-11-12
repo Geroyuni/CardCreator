@@ -2,6 +2,10 @@ const WORKER = "https://cardcreator.geroyuni.workers.dev";
 const IGDB = "https://images.igdb.com/igdb/image/upload/t_cover_big/";
 const IGDB_SMALL = "https://images.igdb.com/igdb/image/upload/t_cover_small/";
 const ADD_IMAGE = "assets/add.svg";
+const JXL_SRC = "https://unpkg.com/@jsquash/jxl@1.3.0/encode.js";
+const JXL_DATA = "data:image/jxl;base64,";
+const CROP_WIDTH = 264;
+const CROP_HEIGHT = 352;
 const LATEST_VERSIONS = {
     games: "v1_games",
 };
@@ -16,21 +20,38 @@ try {
     saved = {};
 }
 
+if (saved.userImages)
+    for (const image of saved.images || [])
+        if (image.src.startsWith("user:")) {
+            const b64 = saved.userImages[image.src.slice(5)];
+            image.src = b64 ? JXL_DATA + b64 : ADD_IMAGE;
+        }
+
 let cardsId = saved.cardsId || null;
 let currentCollection;
 let selectedImg;
 let openDetails;
 let held = false;
+let openPopover;
 let pressTimer;
+let cropState = null;
+let cropping = false;
+const cropPointers = new Map();
+let pinch = null;
+let jxlModule;
 
 const cardsEl = $("cards");
-const navbar = $("navbar");
-const main = document.querySelector("main");
-const search = $("search");
+const searchModal = $("search");
 const searchInput = $("searchInput");
 const searchResults = $("searchResults");
 const shareModal = $("share");
+const shareStatus = $("shareStatus");
 const tooltip = $("tooltip");
+const cropModal = $("crop");
+const cropViewport = $("cropViewport");
+const cropImage = $("cropImage");
+const cropNameInput = $("cropName");
+const cropApply = $("cropApply");
 
 function toBase64(bytes) {
     let binary = "";
@@ -64,6 +85,11 @@ async function decompressText(b64) {
 const setColor = c =>
     document.documentElement.style.setProperty("--color", c);
 
+function importJxl() {
+    jxlModule ??= import(JXL_SRC);
+    return jxlModule;
+}
+
 function guard() {
     if (!shared) return true;
     const ok = confirm(
@@ -80,7 +106,7 @@ function guard() {
 
 function cardImages() {
     return [...document.querySelectorAll("#cards .card img")].map(img => ({
-        src: img.getAttribute("src"),
+        src: img.dataset.src || img.getAttribute("src"),
         name: img.dataset.name || "",
     }));
 }
@@ -116,6 +142,7 @@ $("mobileResetButton").addEventListener("click", resetCollection);
 
 function setCardImage(img, src, name) {
     img.src = src;
+    img.dataset.src = src;
     img.alt = name || "";
     img.dataset.name = name || "";
     const card = img.closest(".card");
@@ -289,17 +316,22 @@ function selectCard(img) {
     selectedImg = img;
     searchInput.value = "";
     showEmptyState();
-    search.showPopover();
+    searchModal.showPopover();
     searchInput.focus();
+    syncBackground();
 }
 
+function commitImage(src, name) {
+    setCardImage(selectedImg, src, name);
+    searchModal.hidePopover();
+    syncBackground();
+    cardsId = null;
+    save();
+}
 
 function applyImage(src, name) {
     if (!guard()) return;
-    setCardImage(selectedImg, src, name);
-    search.hidePopover();
-    cardsId = null;
-    save();
+    commitImage(src, name);
 }
 
 function showEmptyState() {
@@ -349,7 +381,6 @@ function showResultsIGDB(games) {
     }
     searchResults.hidden = !searchResults.children.length;
 }
-
 
 async function runSearch() {
     const query = searchInput.value;
@@ -408,6 +439,194 @@ searchResults.addEventListener("keydown", e => {
         : items[index - 1] || searchInput;
     focusResult(next);
 });
+
+$("uploadButton").addEventListener("click", () =>
+    $("uploadInput").click());
+
+$("uploadInput").addEventListener("change", e => {
+    if (e.target.files[0]) openCrop(e.target.files[0]);
+    e.target.value = "";
+});
+
+searchModal.addEventListener("paste", e => {
+    const item = [...e.clipboardData.items]
+        .find(i => i.type.startsWith("image/"));
+    if (!item) return;
+    e.preventDefault();
+    openCrop(item.getAsFile());
+});
+
+async function openCrop(file) {
+    const url = URL.createObjectURL(file);
+    cropImage.src = url;
+    try {
+        await cropImage.decode();
+    } catch {
+        URL.revokeObjectURL(url);
+        cropImage.removeAttribute("src");
+        return;
+    }
+    const iw = cropImage.naturalWidth;
+    const ih = cropImage.naturalHeight;
+    const s0 = Math.max(CROP_WIDTH / iw, CROP_HEIGHT / ih);
+    cropState = {
+        iw,
+        ih,
+        s0,
+        s: s0,
+        tx: (CROP_WIDTH - iw * s0) / 2,
+        ty: (CROP_HEIGHT - ih * s0) / 2,
+    };
+    updateCropTransform();
+    if (openPopover === searchModal) searchModal.hidePopover();
+    cropModal.showPopover();
+    syncBackground();
+}
+
+function updateCropTransform() {
+    const { s, tx, ty } = cropState;
+    cropImage.style.transform =
+        `translate(${tx}px, ${ty}px) scale(${s})`;
+}
+
+function clampCrop() {
+    const { s, iw, ih } = cropState;
+    cropState.tx = Math.min(0, Math.max(CROP_WIDTH - iw * s, cropState.tx));
+    cropState.ty = Math.min(0, Math.max(CROP_HEIGHT - ih * s, cropState.ty));
+}
+
+function panCrop(dx, dy) {
+    if (!cropState) return;
+    cropState.tx += dx;
+    cropState.ty += dy;
+    clampCrop();
+    updateCropTransform();
+}
+
+function zoomCrop(px, py, factor) {
+    if (!cropState) return;
+    const s = Math.min(cropState.s0 * 10,
+        Math.max(cropState.s0, cropState.s * factor));
+    const k = s / cropState.s;
+    cropState.tx = px - (px - cropState.tx) * k;
+    cropState.ty = py - (py - cropState.ty) * k;
+    cropState.s = s;
+    clampCrop();
+    updateCropTransform();
+}
+
+cropViewport.addEventListener("pointerdown", e => {
+    cropViewport.setPointerCapture(e.pointerId);
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (cropPointers.size === 2) {
+        const [a, b] = [...cropPointers.values()];
+        pinch = {
+            dist: Math.hypot(a.x - b.x, a.y - b.y),
+            mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+        };
+    }
+});
+
+cropViewport.addEventListener("pointermove", e => {
+    if (!cropPointers.has(e.pointerId)) return;
+    const prev = cropPointers.get(e.pointerId);
+    const cur = { x: e.clientX, y: e.clientY };
+    cropPointers.set(e.pointerId, cur);
+    if (cropPointers.size === 1) {
+        panCrop(cur.x - prev.x, cur.y - prev.y);
+    } else if (pinch) {
+        const [a, b] = [...cropPointers.values()];
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        const rect = cropViewport.getBoundingClientRect();
+        if (pinch.dist > 0)
+            zoomCrop(mid.x - rect.left, mid.y - rect.top,
+                dist / pinch.dist);
+        panCrop(mid.x - pinch.mid.x, mid.y - pinch.mid.y);
+        pinch = { dist, mid };
+    }
+});
+
+for (const type of ["pointerup", "pointercancel"])
+    cropViewport.addEventListener(type, e => {
+        cropPointers.delete(e.pointerId);
+        if (cropPointers.size < 2) pinch = null;
+    });
+
+cropViewport.addEventListener("wheel", e => {
+    e.preventDefault();
+    const rect = cropViewport.getBoundingClientRect();
+    zoomCrop(
+        e.clientX - rect.left,
+        e.clientY - rect.top,
+        Math.exp(-e.deltaY * 0.002),
+    );
+}, { passive: false });
+
+async function exportCrop() {
+    const { s, tx, ty } = cropState;
+    const sw = CROP_WIDTH / s;
+    const sh = CROP_HEIGHT / s;
+    const outW = sw >= CROP_WIDTH ? CROP_WIDTH : Math.round(sw);
+    const outH = sh >= CROP_HEIGHT ? CROP_HEIGHT : Math.round(sh);
+    const canvas = document.createElement("canvas");
+    canvas.width = outW;
+    canvas.height = outH;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(cropImage, -tx / s, -ty / s, sw, sh, 0, 0, outW, outH);
+    const { default: encodeJxl } = await importJxl();
+    const buffer = await encodeJxl(ctx.getImageData(0, 0, outW, outH));
+    return new Blob([buffer], { type: "image/jxl" });
+}
+
+cropApply.addEventListener("click", async () => {
+    if (cropping || !cropState) return;
+    cropping = true;
+    cropApply.disabled = true;
+    try {
+        if (!guard()) return;
+        const blob = await exportCrop();
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        cropModal.hidePopover();
+        syncBackground();
+        commitImage(JXL_DATA + toBase64(bytes), cropNameInput.value.trim());
+
+    } catch (error) {
+        console.error(error);
+    } finally {
+        cropping = false;
+        cropApply.disabled = false;
+    }
+});
+
+cropNameInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") cropApply.click();
+});
+
+function closeCrop() {
+    cropModal.hidePopover();
+    syncBackground();
+}
+
+$("cropCancel").addEventListener("click", closeCrop);
+
+cropModal.addEventListener("toggle", e => {
+    const shown = e.newState === "open";
+    if (shown) openPopover = cropModal;
+    else if (openPopover === cropModal) openPopover = null;
+    syncBackground();
+    if (shown) {
+        cropNameInput.focus();
+        return;
+    }
+    if (cropImage.src.startsWith("blob:"))
+        URL.revokeObjectURL(cropImage.src);
+    cropImage.removeAttribute("src");
+    cropState = null;
+    cropPointers.clear();
+    pinch = null;
+});
+
 
 cardsEl.addEventListener("click", e => {
     if (held) {
@@ -494,49 +713,98 @@ $("mobileMenu").addEventListener("click", e => {
 });
 
 function syncBackground() {
-    const open = search.open || shareModal.open;
-    navbar.inert = open;
-    main.inert = open;
+    for (const child of document.body.children)
+        child.inert = openPopover != null && child !== openPopover;
 }
 
-for (const modal of [search, shareModal])
+
+for (const modal of [searchModal, shareModal])
     modal.addEventListener("toggle", () => {
         tooltip.hidden = true;
+        openPopover = openPopover === modal ? null : modal;
         syncBackground();
     });
 
-search.addEventListener("click", e => {
-    if (e.target === search) search.hidePopover();
+
+document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    if (cropModal.matches(":popover")) closeCrop();
 });
 
-async function openShare() {
-    if (!cardsId) {
-        const body = await compressText(JSON.stringify({
-            collection: currentCollection,
-            images: cardImages(),
-        }));
-        const res = await fetch(`${WORKER}/share`, {
+
+searchModal.addEventListener("click", e => {
+    if (e.target !== searchModal) return;
+    searchModal.hidePopover();
+    syncBackground();
+});
+
+const imageLink = id => `${WORKER}/image/${id}`;
+
+async function uploadDataImages() {
+    for (const img of cardsEl.querySelectorAll(".card img")) {
+        const src = img.dataset.src || "";
+        if (!src.startsWith(JXL_DATA)) continue;
+        const res = await fetch(WORKER + "/image", {
             method: "POST",
-            body,
+            headers: { "Content-Type": "image/jxl" },
+            body: fromBase64(src.slice(JXL_DATA.length)),
         });
-        if (!res.ok) return;
-        cardsId = (await res.text()).trim();
+        if (!res.ok) throw new Error(`upload failed (${res.status})`);
+        const id = (await res.text()).trim();
+        setCardImage(img, imageLink(id), img.dataset.name);
         save();
     }
+}
+
+async function openShare() {
+    shareModal.showPopover();
+    syncBackground();
+    $("shareUrl").value = "";
+    $("copyShare").classList.remove("copied");
+    const pending = [...cardsEl.querySelectorAll(".card img")]
+        .some(img => (img.dataset.src || "").startsWith(JXL_DATA));
+    const busy = pending && !cardsId;
+    shareStatus.hidden = !busy;
+    shareStatus.textContent = "Uploading your images…";
+    $("copyShare").disabled = busy;
+    try {
+        if (busy) await uploadDataImages();
+        if (!cardsId) {
+            const body = await compressText(JSON.stringify({
+                collection: currentCollection,
+                images: cardImages(),
+            }));
+            const res = await fetch(`${WORKER}/share`, {
+                method: "POST",
+                body,
+            });
+            if (!res.ok) throw new Error(`share failed (${res.status})`);
+            cardsId = (await res.text()).trim();
+            save();
+        }
+    } catch (error) {
+        console.error(error);
+        shareStatus.hidden = false;
+        shareStatus.textContent = "Sharing failed. Try again.";
+        return;
+    }
+    shareStatus.hidden = true;
+    $("copyShare").disabled = false;
     const query = new URLSearchParams({
         name: $("name").value,
         color: $("color").value.slice(1),
         cards: cardsId,
     });
-    const link = `${location.origin + location.pathname}?${query}`;
-    const name = $("name").value.trim();
-    $("shareUrl").value = link;
-    $("copyShare").classList.remove("copied");
-    shareModal.showPopover();
+    $("shareUrl").value =
+        `${location.origin + location.pathname}?${query}`;
 }
 
 $("shareButton").addEventListener("click", openShare);
 $("mobileShareButton").addEventListener("click", openShare);
+$("closeShare").addEventListener("click", () => {
+    shareModal.hidePopover();
+    syncBackground();
+});
 
 async function copyField(input, button) {
     await navigator.clipboard.writeText(input.value);

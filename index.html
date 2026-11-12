@@ -12,6 +12,9 @@
     <title>CardCreator</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="assets/cardcreator.svg" type="image/svg+xml">
+    <script type="importmap">
+        {"imports": {"wasm-feature-detect": "https://unpkg.com/wasm-feature-detect@1/dist/esm/index.js"}}
+    </script>
     <script src="script.js" defer></script>
 </head>
 
@@ -77,19 +80,25 @@
     <div id="tooltip" hidden></div>
 
     <div id="search" popover role="dialog" aria-modal="true" aria-label="Search">
-        <input id="searchInput" autocomplete="off" placeholder="Search for a game name, or paste an image link">
+        <div class="search-row">
+            <input id="searchInput" autocomplete="off" placeholder="Search for a game, or paste a link or image">
+            <button id="uploadButton" class="icon-button" aria-label="Upload image" title="Upload image">
+                <span class="icon" aria-hidden="true">add_photo_alternate</span>
+            </button>
+            <input id="uploadInput" type="file" accept="image/*" hidden>
+        </div>
         <ul id="searchResults" hidden></ul>
     </div>
 
     <div id="share" popover role="dialog" aria-modal="true" aria-label="Share">
         <div class="share-header">
             <h2>Share</h2>
-            <button id="closeShare" class="icon-button" aria-label="Close" title="Close" popovertarget="share"
-                popovertargetaction="hide">
+            <button id="closeShare" class="icon-button" aria-label="Close" title="Close">
                 <span class="icon" aria-hidden="true">close</span>
             </button>
         </div>
         <div class="share-section">
+            <p id="shareStatus" hidden></p>
             <div class="share-field">
                 <input id="shareUrl" readonly aria-label="Raw link">
                 <button id="copyShare" class="copy-button" aria-label="Copy raw link" title="Copy">
@@ -99,6 +108,20 @@
             </div>
         </div>
     </div>
+
+    <div id="crop" popover="manual" role="dialog" aria-modal="true" aria-label="Crop image">
+        <h2>Crop</h2>
+        <div id="cropViewport">
+            <img id="cropImage" alt="" draggable="false">
+        </div>
+        <input id="cropName" placeholder="Name for this image (optional)" autocomplete="off"
+            aria-label="Name for this image">
+        <div class="crop-actions">
+            <button id="cropCancel" type="button">Cancel</button>
+            <button id="cropApply" type="button">Apply</button>
+        </div>
+    </div>
+
 </body>
 
 </html>

@@ -426,11 +426,19 @@ input[type="color"]::-moz-color-swatch {
     background: alpha(from var(--color-bright) / 80%);
 }
 
-#searchInput {
-    display: block;
+.search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: 400px;
     max-width: calc(100% - 32px);
     margin: 64px auto 0;
+}
+
+#searchInput {
+    display: block;
+    flex: 1;
+    min-width: 0;
     padding: 16px;
     border: 1px solid var(--color-light);
     border-radius: 6px;
@@ -559,6 +567,84 @@ input[type="color"]::-moz-color-swatch {
 
         &.copied .check {
             display: block;
+        }
+    }
+}
+
+#shareStatus {
+    margin: 0 0 12px;
+    font-size: 14px;
+    color: var(--color-dark);
+}
+
+#crop {
+    width: fit-content;
+    padding: 20px;
+    border: 1px solid var(--color-light);
+    border-radius: 12px;
+    color: inherit;
+    background: var(--color-lighter);
+
+    &::backdrop {
+        background: alpha(from var(--color-bright) / 80%);
+    }
+
+    h2 {
+        margin: 0 0 12px;
+    }
+
+    #cropViewport {
+        position: relative;
+        width: 264px;
+        aspect-ratio: 3 / 4;
+        border: 1px solid var(--color-light);
+        border-radius: 8px;
+        background: alpha(from var(--color-darker) / 4%);
+        overflow: clip;
+        touch-action: none;
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    #cropImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    input {
+        width: 100%;
+        margin: 12px 0;
+        padding: 12px;
+        border: 1px solid var(--color-lighter);
+        border-radius: 6px;
+        background: var(--color-bright);
+    }
+
+    .crop-actions {
+        display: flex;
+        justify-content: end;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    button {
+        padding: 10px 16px;
+        border: 1px solid var(--color-light);
+        border-radius: 6px;
+        background: var(--color-lighter);
+        color: var(--color-darker);
+        font-weight: 700;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--color-light);
         }
     }
 }
