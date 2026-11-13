@@ -649,6 +649,7 @@ cardsEl.addEventListener("keydown", e => {
 });
 
 cardsEl.addEventListener("touchstart", e => {
+    held = false;
     const x = e.touches[0].clientX;
     const y = e.touches[0].clientY;
     clearTimeout(pressTimer);
