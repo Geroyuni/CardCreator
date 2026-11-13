@@ -616,6 +616,7 @@ cropModal.addEventListener("toggle", e => {
     else if (openPopover === cropModal) openPopover = null;
     syncBackground();
     if (shown) {
+        cropNameInput.value = "";
         cropNameInput.focus();
         return;
     }
