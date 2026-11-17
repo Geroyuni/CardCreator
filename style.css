@@ -4,18 +4,31 @@
     --color-dark: oklch(from var(--color) calc(l - 0.20) calc(c * 1.1) calc(h - 10));
     --color-light: oklch(from var(--color) calc(l + 0.20) calc(c * 0.5) calc(h + 10));
     --color-lighter: oklch(from var(--color) calc(l + 0.25) calc(c * 0.3) calc(h + 15));
-    --color-bright: oklch(from var(--color) calc(l + 0.40) calc(c * 0.11) calc(h + 20));
+    --color-lightest: oklch(from var(--color) calc(l + 0.40) calc(c * 0.11) calc(h + 20));
+    --color-transparent: alpha(from var(--color-darker) / 6%);
+    --color-overlay: alpha(from var(--color-lightest) / 85%);
+}
+
+:focus-visible {
+    outline: 2px solid var(--color);
+    outline-offset: -2px;
+    scroll-margin: 8px;
+}
+
+:root:has(:popover-open) {
+    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 * {
     box-sizing: border-box;
+    color: var(--color-darker);
 }
 
 body {
     padding: 64px 16px 16px;
     font-family: Roboto, sans-serif;
-    color: var(--color-darker);
-    background: var(--color-bright);
+    background: var(--color-lightest);
 }
 
 button,
@@ -25,14 +38,83 @@ select {
     color: inherit;
 }
 
-button:disabled {
-    opacity: 0.4;
-    cursor: default;
+button {
+    padding: 12px 16px;
+    border: 1px solid var(--color-light);
+    border-radius: 6px;
+    background: var(--color-lighter);
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+
+    color: var(--color-dark);
+
+    &:hover {
+        background: var(--color-light);
+    }
+
+    &:disabled {
+        background: none;
+        cursor: default;
+
+        .icon {
+            color: var(--color-light)
+        }
+    }
+}
+
+input {
+    background: var(--color-lightest);
+    border: 1px solid var(--color-light);
+    border-radius: 6px;
+    padding: 12px;
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+}
+
+input[type="color"] {
+    width: 24px;
+    height: 42px;
+    padding: 0 0 16px;
+    border: 0;
+    border-bottom: 2px solid var(--color-light);
+    border-radius: 0;
+    background: transparent;
+
+    &:focus {
+        outline: none;
+        border-bottom-color: var(--color-dark);
+    }
+
+    &::-webkit-color-swatch-wrapper {
+        padding: 0;
+        border: 0;
+    }
+
+    &::-webkit-color-swatch-wrapper {
+        padding: 0;
+        border: 0;
+    }
+
+    &::-webkit-color-swatch {
+        border: 0;
+        border-radius: 50%;
+    }
+
+    &::-moz-color-swatch {
+        border: 0;
+        border-radius: 50%;
+    }
 }
 
 h2 {
     color: var(--color-dark);
 }
+
+/* Navbar */
 
 #navbar {
     position: fixed;
@@ -44,7 +126,7 @@ h2 {
     justify-content: space-between;
     gap: 12px;
     padding: 8px 16px;
-    background: alpha(from var(--color-bright) / 75%);
+    background: var(--color-overlay);
 }
 
 #navbar a {
@@ -82,12 +164,7 @@ h2 {
     border: 0;
     border-radius: 6px;
     background: transparent;
-    color: var(--color-dark);
     cursor: pointer;
-}
-
-.icon-button:hover:not(:disabled) {
-    background: alpha(from var(--color-darker) / 8%);
 }
 
 .icon {
@@ -121,7 +198,7 @@ h2 {
     flex-direction: column;
     gap: 8px;
     padding: 12px 16px;
-    background: var(--color-bright);
+    background: var(--color-lightest);
     border-bottom: 1px solid var(--color-light);
 }
 
@@ -133,7 +210,7 @@ h2 {
     padding: 8px;
     border: 1px solid var(--color-light);
     border-radius: 6px;
-    background: var(--color-bright);
+    background: var(--color-lightest);
     text-align: left;
     cursor: pointer;
 }
@@ -156,25 +233,27 @@ h2 {
     }
 }
 
+/* ===== Misc. ===== */
+
 #updateBanner {
     width: fit-content;
     max-width: 100%;
     margin: 0 auto 24px;
 }
 
-#updateButton {
-    padding: 12px 16px;
-    border: 1px solid var(--color-light);
+#tooltip {
+    position: fixed;
+    z-index: 30;
+    max-width: 280px;
+    padding: 4px 10px;
     border-radius: 6px;
-    background: var(--color-lighter);
-    color: var(--color-darker);
-    font-weight: 700;
+    background: var(--color-darker);
+    color: var(--color-lightest);
+    font-size: 14px;
+    line-height: 1.3;
     text-align: center;
-    cursor: pointer;
-}
-
-#updateButton:hover {
-    background: var(--color-light);
+    overflow-wrap: anywhere;
+    pointer-events: none;
 }
 
 #nameSection {
@@ -187,6 +266,7 @@ h2 {
     field-sizing: content;
     border: 0;
     border-bottom: 2px solid var(--color-light);
+    border-radius: 0;
     min-width: 2px;
     max-width: 600px;
     padding: 8px 0;
@@ -196,39 +276,16 @@ h2 {
     background: transparent;
 }
 
+#name::placeholder {
+    color: var(--color);
+}
+
 #name:focus {
     outline: none;
     border-bottom-color: var(--color-dark);
 }
 
-input[type="color"] {
-    width: 24px;
-    height: 42px;
-    padding: 0 0 16px;
-    border: 0;
-    border-bottom: 2px solid var(--color-light);
-    background: transparent;
-}
-
-input[type="color"]:focus {
-    outline: none;
-    border-bottom-color: var(--color-dark);
-}
-
-input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-    border: 0;
-}
-
-input[type="color"]::-webkit-color-swatch {
-    border: 0;
-    border-radius: 50%;
-}
-
-input[type="color"]::-moz-color-swatch {
-    border: 0;
-    border-radius: 50%;
-}
+/* Cards */
 
 #cards {
     display: grid;
@@ -256,7 +313,7 @@ input[type="color"]::-moz-color-swatch {
         height: 220px;
         display: block;
         object-fit: cover;
-        background: alpha(from var(--color-darker) / 4%);
+        background: var(--color-transparent);
     }
 
     >p {
@@ -277,7 +334,7 @@ input[type="color"]::-moz-color-swatch {
     padding: 2px 8px;
     border-radius: 999px;
     background: var(--color-darker);
-    color: var(--color-bright);
+    color: var(--color-lightest);
     font-size: 14px;
     font-weight: 700;
 }
@@ -299,7 +356,6 @@ input[type="color"]::-moz-color-swatch {
         margin: 0 0 4px;
         font-size: 24px;
         font-weight: 700;
-        color: var(--color-darker);
     }
 
     .details-desc {
@@ -334,36 +390,43 @@ input[type="color"]::-moz-color-swatch {
             object-fit: cover;
             background: alpha(from var(--color-darker) / 4%);
         }
+
+        img:hover {
+            background: alpha(from var(--color-darker) / 6%);
+        }
     }
 }
 
 @media (hover: hover) and (min-width: 769px) {
     .card {
-        .details {
+        .details-wrap {
+            display: block;
+            position: fixed;
+            z-index: 15;
             top: anchor(top);
             left: anchor(right);
-            margin: 0 12px;
+            width: calc(173px * 2 + 12px * 3);
             position-try-fallbacks: flip-inline;
+            visibility: hidden;
+            transition: visibility 0s linear 100ms;
+        }
+
+        &:hover .details-wrap {
+            visibility: visible;
+            transition: visibility 0s linear 550ms;
+        }
+
+        &:has(:focus-visible) .details-wrap {
+            visibility: visible;
+            transition: none;
+        }
+
+        .details {
+            position: static;
+            margin: 0 12px;
             transition:
                 opacity 100ms ease,
                 visibility 0s linear 100ms;
-
-            &::before,
-            &::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                width: 12px;
-            }
-
-            &::before {
-                right: 100%;
-            }
-
-            &::after {
-                left: 100%;
-            }
         }
 
         &:hover .details {
@@ -401,38 +464,28 @@ input[type="color"]::-moz-color-swatch {
     }
 }
 
-
-#tooltip {
-    position: fixed;
-    z-index: 30;
-    max-width: 280px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: var(--color-darker);
-    color: var(--color-bright);
-    font-size: 14px;
-    line-height: 1.3;
-    text-align: center;
-    overflow-wrap: anywhere;
-    pointer-events: none;
-}
+/* Search */
 
 #search {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    padding: 0;
-    color: inherit;
-    background: alpha(from var(--color-bright) / 80%);
+    position: fixed;
+    top: 15vh;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 550px;
+    max-width: 90vw;
+    margin-inline: auto;
+    margin-block: 0;
+    height: auto;
 }
+
 
 .search-row {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 400px;
-    max-width: calc(100% - 32px);
-    margin: 64px auto 0;
+    width: 100%;
+    margin: 0;
 }
 
 #searchInput {
@@ -440,21 +493,14 @@ input[type="color"]::-moz-color-swatch {
     flex: 1;
     min-width: 0;
     padding: 16px;
-    border: 1px solid var(--color-light);
-    border-radius: 6px;
-    background: var(--color-lighter);
 }
 
 #searchResults {
-    width: 400px;
-    max-width: calc(100% - 32px);
-    margin: 12px auto;
+    margin: 12px 0 0;
     padding: 0;
     list-style: none;
-    border: 1px solid var(--color-light);
-    border-radius: 6px;
-    overflow: clip;
-    background: var(--color-bright);
+    max-height: 60vh;
+    overflow-y: auto;
 
     li {
         padding: 12px;
@@ -488,44 +534,17 @@ input[type="color"]::-moz-color-swatch {
 
     input {
         width: 100%;
-        border: 0;
-        background: transparent;
     }
 }
 
+/* Share */
+
 #share {
-    width: 448px;
-    max-width: calc(100% - 32px);
-    padding: 20px;
-    border: 1px solid var(--color-light);
-    border-radius: 12px;
-    color: inherit;
-    background: var(--color-lighter);
-
-    &::backdrop {
-        background: alpha(from var(--color-bright) / 80%);
-    }
-
-    .share-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 20px;
-
-        h2 {
-            margin: 0;
-        }
-    }
-
-    .share-section+.share-section {
-        margin-top: 20px;
-    }
-
     .share-field {
         display: flex;
         border: 1px solid var(--color-light);
         border-radius: 6px;
-        background: var(--color-bright);
+        background: var(--color-lightest);
 
         &:focus-within {
             border-color: var(--color-dark);
@@ -534,7 +553,6 @@ input[type="color"]::-moz-color-swatch {
         input {
             flex: 1;
             min-width: 0;
-            padding: 12px;
             border: 0;
             font-size: 14px;
             background: transparent;
@@ -577,21 +595,9 @@ input[type="color"]::-moz-color-swatch {
     color: var(--color-dark);
 }
 
+/* Crop */
+
 #crop {
-    width: fit-content;
-    padding: 20px;
-    border: 1px solid var(--color-light);
-    border-radius: 12px;
-    color: inherit;
-    background: var(--color-lighter);
-
-    &::backdrop {
-        background: alpha(from var(--color-bright) / 80%);
-    }
-
-    h2 {
-        margin: 0 0 12px;
-    }
 
     #cropViewport {
         position: relative;
@@ -599,7 +605,7 @@ input[type="color"]::-moz-color-swatch {
         aspect-ratio: 3 / 4;
         border: 1px solid var(--color-light);
         border-radius: 8px;
-        background: alpha(from var(--color-darker) / 4%);
+        background: var(--color-transparent);
         overflow: clip;
         touch-action: none;
         cursor: grab;
@@ -621,10 +627,6 @@ input[type="color"]::-moz-color-swatch {
     input {
         width: 100%;
         margin: 12px 0;
-        padding: 12px;
-        border: 1px solid var(--color-lighter);
-        border-radius: 6px;
-        background: var(--color-bright);
     }
 
     .crop-actions {
@@ -633,18 +635,39 @@ input[type="color"]::-moz-color-swatch {
         gap: 12px;
         margin-top: 12px;
     }
+}
 
-    button {
-        padding: 10px 16px;
-        border: 1px solid var(--color-light);
-        border-radius: 6px;
-        background: var(--color-lighter);
-        color: var(--color-darker);
-        font-weight: 700;
-        cursor: pointer;
+/* Popovers */
 
-        &:hover {
-            background: var(--color-light);
+#search,
+#share {
+    width: 550px;
+    max-width: 90vw;
+}
+
+[popover] {
+    padding: 20px;
+    border: 1px solid var(--color-light);
+    border-radius: 12px;
+    background: var(--color-lighter);
+
+    h2 {
+        margin: 0 0 12px;
+    }
+
+    .popover-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+
+        h2 {
+            margin: 0;
         }
+    }
+
+    &::backdrop {
+        background: var(--color-overlay);
     }
 }

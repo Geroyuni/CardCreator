@@ -15,71 +15,73 @@
     <script type="importmap">
         {"imports": {"wasm-feature-detect": "https://unpkg.com/wasm-feature-detect@1/dist/esm/index.js"}}
     </script>
-    <script src="script.js" defer></script>
+    <script type="module" src="js/main.js"></script>
 </head>
 
 <body>
-    <nav id="navbar" aria-label="Main">
-        <div class="navbar-left">
-            <a href="./"><span class="navbar-title">
-                    <svg class="icon" viewBox="0 0 24 24" stroke-linecap="round" aria-hidden="true">
-                        <g transform="matrix(1.062518,-0.284701,0.274995,1.026296,-2.987645,2.816156)">
-                            <path fill="currentColor"
-                                d="M14.182,2.118C16.189,2.118 17.818,3.805 17.818,5.882L17.818,18.118C17.818,20.195 16.189,21.882 14.182,21.882L7.818,21.882C5.811,21.882 4.182,20.195 4.182,18.118L4.182,5.882C4.182,3.805 5.811,2.118 7.818,2.118L14.182,2.118ZM14.182,4L7.818,4C6.815,4 6,4.843 6,5.882L6,18.118C6,19.157 6.815,20 7.818,20L14.182,20C15.185,20 16,19.157 16,18.118L16,5.882C16,4.843 15.185,4 14.182,4Z" />
-                        </g>
-                        <g transform="matrix(0.965926,-0.258819,0.258819,0.965926,-2.343385,2.902346)">
-                            <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" fill="none" stroke="currentColor"
-                                stroke-width="2" />
-                        </g>
-                        <g transform="matrix(-0.965926,0.258819,-0.258819,-0.965926,26.343385,21.097654)">
-                            <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" fill="none" stroke="currentColor"
-                                stroke-width="2" />
-                        </g>
-                    </svg>
-                    CardCreator
-                </span></a>
-            <select id="collectionSelect" class="collection-select" aria-label="Choose collection">
-                <option value="v1_games" selected>Game Collection</option>
-                <option value="v1_music" disabled>Music Collection (Soon)</option>
-            </select>
-        </div>
-        <div class="navbar-right">
-            <button id="resetButton" class="icon-button" aria-label="Reset collection" title="Reset">
-                <span class="icon" aria-hidden="true">restart_alt</span>
-            </button>
-            <button id="shareButton" class="icon-button" aria-label="Share" title="Share">
-                <span class="icon" aria-hidden="true">share</span>
-            </button>
-        </div>
-        <details id="mobileMenu">
-            <summary class="icon-button" aria-label="Menu">
-                <span class="icon" aria-hidden="true">menu</span>
-            </summary>
-            <div class="mobile-panel">
-                <select id="mobileCollectionSelect" class="collection-select" aria-label="Choose collection">
+    <div id="page">
+        <nav id="navbar" aria-label="Main">
+            <div class="navbar-left">
+                <a href="./"><span class="navbar-title">
+                        <svg class="icon" viewBox="0 0 24 24" stroke-linecap="round" aria-hidden="true">
+                            <g transform="matrix(1.062518,-0.284701,0.274995,1.026296,-2.987645,2.816156)">
+                                <path fill="currentColor"
+                                    d="M14.182,2.118C16.189,2.118 17.818,3.805 17.818,5.882L17.818,18.118C17.818,20.195 16.189,21.882 14.182,21.882L7.818,21.882C5.811,21.882 4.182,20.195 4.182,18.118L4.182,5.882C4.182,3.805 5.811,2.118 7.818,2.118L14.182,2.118ZM14.182,4L7.818,4C6.815,4 6,4.843 6,5.882L6,18.118C6,19.157 6.815,20 7.818,20L14.182,20C15.185,20 16,19.157 16,18.118L16,5.882C16,4.843 15.185,4 14.182,4Z" />
+                            </g>
+                            <g transform="matrix(0.965926,-0.258819,0.258819,0.965926,-2.343385,2.902346)">
+                                <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" fill="none"
+                                    stroke="currentColor" stroke-width="2" />
+                            </g>
+                            <g transform="matrix(-0.965926,0.258819,-0.258819,-0.965926,26.343385,21.097654)">
+                                <path d="M10,6C8.518,6 8,6.974 8,8C8,9.026 8.443,10 10,10" fill="none"
+                                    stroke="currentColor" stroke-width="2" />
+                            </g>
+                        </svg>
+                        CardCreator
+                    </span></a>
+                <select id="collectionSelect" class="collection-select" aria-label="Choose collection">
                     <option value="v1_games" selected>Game Collection</option>
                     <option value="v1_music" disabled>Music Collection (Soon)</option>
                 </select>
-                <button id="mobileShareButton" class="mobile-item">Share</button>
-                <button id="mobileResetButton" class="mobile-item">Reset to default</button>
             </div>
-        </details>
-    </nav>
+            <div class="navbar-right">
+                <button id="resetButton" class="icon-button" aria-label="Reset collection" title="Reset">
+                    <span class="icon" aria-hidden="true">restart_alt</span>
+                </button>
+                <button id="shareButton" class="icon-button" aria-label="Share" title="Share">
+                    <span class="icon" aria-hidden="true">share</span>
+                </button>
+            </div>
+            <details id="mobileMenu">
+                <summary class="icon-button" aria-label="Menu">
+                    <span class="icon" aria-hidden="true">menu</span>
+                </summary>
+                <div class="mobile-panel">
+                    <select id="mobileCollectionSelect" class="collection-select" aria-label="Choose collection">
+                        <option value="v1_games" selected>Game Collection</option>
+                        <option value="v1_music" disabled>Music Collection (Soon)</option>
+                    </select>
+                    <button id="mobileShareButton" class="mobile-item">Share</button>
+                    <button id="mobileResetButton" class="mobile-item">Reset to default</button>
+                </div>
+            </details>
+        </nav>
 
-    <main>
-        <div id="updateBanner" hidden>
-            <button id="updateButton" type="button">Update to newest collection version</button>
-        </div>
-        <div id="nameSection">
-            <input id="name" placeholder="Your Name" aria-label="Your name">'s Collection
-            <input id="color" type="color" value="#999" aria-label="Color">
-        </div>
-        <div id="cards"></div>
-    </main>
+        <main>
+            <div id="updateBanner" hidden>
+                <button id="updateButton" type="button">Update to newest collection version</button>
+            </div>
+            <div id="nameSection">
+                <input id="name" placeholder="Your Name" aria-label="Your name">'s Collection
+                <input id="color" type="color" value="#999" aria-label="Color">
+            </div>
+            <div id="cards"></div>
+        </main>
 
-    <div id="tooltip" hidden></div>
+        <div id="tooltip" hidden></div>
+    </div>
 
-    <div id="search" popover role="dialog" aria-modal="true" aria-label="Search">
+    <div id="search" popover role="dialog" aria-label="Search">
         <div class="search-row">
             <input id="searchInput" autocomplete="off" placeholder="Search for a game, or paste a link or image">
             <button id="uploadButton" class="icon-button" aria-label="Upload image" title="Upload image">
@@ -90,10 +92,11 @@
         <ul id="searchResults" hidden></ul>
     </div>
 
-    <div id="share" popover role="dialog" aria-modal="true" aria-label="Share">
-        <div class="share-header">
+    <div id="share" popover role="dialog" aria-label="Share">
+        <div class="popover-title">
             <h2>Share</h2>
-            <button id="closeShare" class="icon-button" aria-label="Close" title="Close">
+            <button popovertarget="share" popovertargetaction="hide" class="icon-button" aria-label="Close"
+                title="Close">
                 <span class="icon" aria-hidden="true">close</span>
             </button>
         </div>
@@ -109,15 +112,17 @@
         </div>
     </div>
 
-    <div id="crop" popover="manual" role="dialog" aria-modal="true" aria-label="Crop image">
-        <h2>Crop</h2>
+    <div id="crop" popover role="dialog" aria-label="Crop image">
+        <div class="popover-title">
+            <h2>Crop</h2>
+        </div>
         <div id="cropViewport">
             <img id="cropImage" alt="" draggable="false">
         </div>
         <input id="cropName" placeholder="Name for this image (optional)" autocomplete="off"
             aria-label="Name for this image">
         <div class="crop-actions">
-            <button id="cropCancel" type="button">Cancel</button>
+            <button popovertarget="crop" popovertargetaction="hide" type="button">Cancel</button>
             <button id="cropApply" type="button">Apply</button>
         </div>
     </div>
