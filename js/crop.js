@@ -138,6 +138,7 @@ export async function openCrop(file) {
   };
 
   updateCropTransform();
+  dom.cropName.value = "";
   await dom.crop.showPopover();
   dom.cropName.focus();
 }
